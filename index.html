@@ -3,182 +3,384 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>เปรียบเทียบ Hardware & Software — เดิม vs ใหม่</title>
+<title>เปรียบเทียบ Breakdown Cost — DS6805-012</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Sarabun',sans-serif;background:#f4f6f9;padding:20px;font-size:13px}
-.header{background:#1a3c6e;color:#fff;border-radius:8px;padding:14px 18px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
-.header h1{font-size:17px}.header p{font-size:11px;opacity:.8;margin-top:3px}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+body{font-family:'Sarabun',sans-serif;background:#f0f2f5;padding:16px;font-size:13px}
+.header{background:linear-gradient(135deg,#1a3c6e,#2563a8);color:#fff;border-radius:10px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.header h1{font-size:17px;font-weight:bold}.header p{font-size:11px;opacity:.85;margin-top:3px}
+.hbtn{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit}
+.hbtn:hover{background:rgba(255,255,255,.35)}
+
+/* Summary cards */
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
 .card{background:#fff;border-radius:8px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.card .lbl{font-size:11px;color:#888}.card .val{font-size:16px;font-weight:bold;margin-top:2px}.card .sub{font-size:11px;color:#aaa}
-.dcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-.dcard{background:#fff;border-radius:8px;padding:8px 14px;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center;font-size:12px}
-.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.fbtn{padding:5px 14px;border-radius:20px;border:1px solid #ccc;cursor:pointer;font-size:12px;font-family:inherit;background:#fff;color:#333}
-.fbtn.active{background:#1a3c6e;color:#fff;font-weight:bold;border-color:#1a3c6e}
-.sec-hdr{color:#fff;font-weight:bold;padding:7px 12px;font-size:13px;border-radius:6px 6px 0 0}
-.hw{background:#1a3c6e}.sw{background:#2e7d32}
-.sec-wrap{margin-bottom:20px}
+.card .lbl{font-size:10px;color:#888;margin-bottom:3px}.card .val{font-size:15px;font-weight:bold}.card .sub{font-size:10px;color:#aaa;margin-top:2px}
+
+/* Filter chips */
+.filter-section{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.filter-title{font-size:12px;color:#555;font-weight:bold;margin-bottom:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:20px;border:2px solid #ddd;cursor:pointer;font-size:12px;font-family:inherit;background:#fff;color:#555;transition:.15s;user-select:none}
+.chip:hover{border-color:#999}
+.chip.on{color:#fff;border-color:transparent}
+
+/* Tables */
+.sec-wrap{margin-bottom:16px;border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.08)}
+.sec-hdr{color:#fff;font-weight:bold;padding:8px 14px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
 .tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}
-th{padding:6px 8px;border:1px solid #ccc;background:#eceff1;text-align:left;white-space:nowrap;font-size:11px}
-td{padding:5px 8px;border:1px solid #e0e0e0;vertical-align:top}
-tr:nth-child(even) td{background:#fafafa}
-.badge{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:bold;white-space:nowrap}
-.b-same{background:#e8f5e9;color:#2e7d32;border:1px solid #66bb6a}
-.b-changed{background:#fff8e1;color:#f57f17;border:1px solid #ffca28}
-.b-new{background:#e3f2fd;color:#1565c0;border:1px solid #42a5f5}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:800px;background:#fff}
+th{padding:6px 8px;border:1px solid #d0d7e2;background:#eef2f8;text-align:left;white-space:nowrap;font-size:11px;color:#334}
+td{padding:5px 8px;border:1px solid #e5e9f0;vertical-align:top}
+tr:nth-child(even) td{background:#fafbfd}
 .num{text-align:right;white-space:nowrap}
 .bold{font-weight:bold}
-.plus{color:#c62828;font-weight:bold}.minus{color:#2e7d32;font-weight:bold}
-.sub-row td{background:#dbeafe!important;font-weight:bold}
-.grand{background:#fff;border:2px solid #1a3c6e;border-radius:6px;padding:10px 16px;margin-top:4px}
-.legend{background:#fff;border-radius:8px;padding:10px 16px;display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:#555;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-top:10px}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
-@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}.dcards{grid-template-columns:1fr}}
+.plus{color:#c62828;font-weight:bold}.minus{color:#2e7d32;font-weight:bold}.zero{color:#888}
+.badge{border-radius:4px;padding:2px 7px;font-size:10px;font-weight:bold;white-space:nowrap}
+.b-same{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7}
+.b-up{background:#fff3e0;color:#e65100;border:1px solid #ffcc80}
+.b-down{background:#e3f2fd;color:#1565c0;border:1px solid #90caf9}
+.b-new{background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8}
+.b-removed{background:#fce4ec;color:#880e4f;border:1px solid #f48fb1}
+.sub-row td{background:#e8edf7!important;font-weight:bold;font-size:12px}
+.grand-row td{background:#1a3c6e!important;color:#fff!important;font-weight:bold}
+.summary-box{background:#fff;border:2px solid #1a3c6e;border-radius:8px;padding:12px 16px;margin-top:6px;margin-bottom:16px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sitem{text-align:center}.sitem .sl{font-size:11px;color:#666}.sitem .sv{font-size:16px;font-weight:bold;margin-top:2px}
+.legend{background:#fff;border-radius:8px;padding:10px 16px;display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:#555;box-shadow:0 1px 3px rgba(0,0,0,.07);margin-top:10px;align-items:center}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}.summary-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div>
-    <h1>เปรียบเทียบ Hardware &amp; Software — เดิม vs ใหม่</h1>
-    <p>DS6805-012 (เดิม) → ชุดข้อมูลใหม่ | สัญญา 36 เดือน</p>
+    <h1>📊 เปรียบเทียบ Breakdown Cost — DS6805-012</h1>
+    <p>เวอร์ชันเก่า (พิมพ์ 31/01/68 | Profit 20.02%) &nbsp;→&nbsp; เวอร์ชันใหม่ (พิมพ์ 02/04/68 | Profit 19.26%)</p>
   </div>
-  <button onclick="exportCSV()" style="background:#217346;color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit">⬇ Export CSV</button>
+  <button class="hbtn" onclick="exportCSV()">⬇ Export CSV</button>
 </div>
 
+<!-- Summary cards -->
 <div class="cards">
-  <div class="card" style="border-top:3px solid #546e7a"><div class="lbl">ต้นทุน HW/SW เดิม</div><div class="val" style="color:#546e7a" id="c1"></div><div class="sub">บาท/สัญญา</div></div>
-  <div class="card" style="border-top:3px solid #1565c0"><div class="lbl">ต้นทุน HW/SW ใหม่</div><div class="val" style="color:#1565c0" id="c2"></div><div class="sub">บาท/สัญญา</div></div>
-  <div class="card" style="border-top:3px solid #c62828"><div class="lbl">ส่วนต่าง (เพิ่มขึ้น)</div><div class="val" style="color:#c62828" id="c3"></div><div class="sub">บาท/สัญญา</div></div>
-  <div class="card" style="border-top:3px solid #6a1b9a"><div class="lbl">ต้นทุนใหม่/เดือน</div><div class="val" style="color:#6a1b9a" id="c4"></div><div class="sub">บาท/เดือน</div></div>
+  <div class="card" style="border-top:3px solid #546e7a"><div class="lbl">ต้นทุนรวม (เก่า)</div><div class="val" style="color:#546e7a" id="c1">-</div><div class="sub">บาท/สัญญา</div></div>
+  <div class="card" style="border-top:3px solid #1565c0"><div class="lbl">ต้นทุนรวม (ใหม่)</div><div class="val" style="color:#1565c0" id="c2">-</div><div class="sub">บาท/สัญญา</div></div>
+  <div class="card" style="border-top:3px solid #c62828"><div class="lbl">ส่วนต่างต้นทุน</div><div class="val" id="c3">-</div><div class="sub">บาท/สัญญา</div></div>
+  <div class="card" style="border-top:3px solid #2e7d32"><div class="lbl">Profit เก่า → ใหม่</div><div class="val" style="color:#2e7d32">20.02% → 19.26%</div><div class="sub">ลดลง 0.76%</div></div>
+  <div class="card" style="border-top:3px solid #6a1b9a"><div class="lbl">ราคาขาย (คงเดิม)</div><div class="val" style="color:#6a1b9a">39,161,974</div><div class="sub">บาท/สัญญา</div></div>
 </div>
 
-<div class="dcards">
-  <div class="dcard"><span>รายการใหม่ทั้งหมด</span><span class="plus" id="d1"></span></div>
-  <div class="dcard"><span>รายการเดิม ราคาเพิ่มขึ้น</span><span class="plus" id="d2"></span></div>
-  <div class="dcard"><span>รายการเดิม ราคาลดลง</span><span class="minus" id="d3"></span></div>
-</div>
-
-<div class="filters">
-  <button class="fbtn active" onclick="setFilter('all',this)">ทั้งหมด</button>
-  <button class="fbtn" onclick="setFilter('same',this)">เหมือนเดิม</button>
-  <button class="fbtn" onclick="setFilter('changed',this)">มีเดิม/เปลี่ยน</button>
-  <button class="fbtn" onclick="setFilter('new',this)">รายการใหม่</button>
+<!-- Filter -->
+<div class="filter-section">
+  <div class="filter-title">🔍 เลือกหมวดต้นทุนที่ต้องการแสดง (เลือกได้มากกว่า 1 หมวด)</div>
+  <div class="chips" id="chips"></div>
 </div>
 
 <div id="tables"></div>
 
 <div class="legend">
+  <strong>สัญลักษณ์:</strong>
   <span><span class="dot" style="background:#43a047"></span>เหมือนเดิม</span>
-  <span><span class="dot" style="background:#ffa000"></span>มีเดิม / เปลี่ยน</span>
-  <span><span class="dot" style="background:#1e88e5"></span>รายการใหม่</span>
+  <span><span class="dot" style="background:#e65100"></span>ราคาเพิ่มขึ้น</span>
+  <span><span class="dot" style="background:#1565c0"></span>ราคาลดลง</span>
+  <span><span class="dot" style="background:#6a1b9a"></span>รายการใหม่</span>
+  <span><span class="dot" style="background:#880e4f"></span>ตัดออก</span>
 </div>
 
 <script>
-const CS=36;
 const fmt=n=>Number(n).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
 
-const data=[
-  {g:"Hardware",s:"changed",n:"Main Server + Windows",oi:"Main Server+Windows 1 ชุด",ov:171450,ni:"DELL R260 (69,000) + Win2025 Std (37,450) + Win2025 CAL (80,000)",nv:186450,note:"แยก Server DC ออกจาก License ชัดเจนขึ้น + เพิ่ม CAL License"},
-  {g:"Hardware",s:"changed",n:"UPS Server (Main)",oi:"UPS Server 1 เครื่อง",ov:7500,ni:"APC BVG2200I-MSN 1 เครื่อง",nv:5700,note:"รายการเดิมมีอยู่ ราคาลดลง"},
-  {g:"Hardware",s:"changed",n:"Standby Server + License",oi:"Standby Server 1 ชุด",ov:46000,ni:"DELL T160 (47,000) + Win2025 Std (37,450)",nv:84450,note:"เพิ่ม License Windows แยกต่างหาก ราคารวมเพิ่มขึ้น"},
-  {g:"Hardware",s:"changed",n:"UPS Standby Server",oi:"UPS สำหรับ Standby 1 เครื่อง",ov:7200,ni:"APC BVG2200I-MSN 1 เครื่อง",nv:5700,note:"รายการเดิมมีอยู่ ราคาลดลง"},
-  {g:"Hardware",s:"new",n:"Server Application (ใหม่)",oi:"-",ov:0,ni:"DELL R260 (63,900) + UPS (5,700)",nv:69600,note:"ไม่มีในเอกสารเดิม เพิ่มใหม่ทั้งหมด"},
-  {g:"Hardware",s:"new",n:"Server Application Backup (ใหม่)",oi:"-",ov:0,ni:"DELL T160 (47,000) + UPS (5,700)",nv:52700,note:"ไม่มีในเอกสารเดิม เพิ่มใหม่ทั้งหมด"},
-  {g:"Hardware",s:"changed",n:"Fortigate Firewall + Config",oi:"Fortigate Firewall (135,000) + Config (20,000)",ov:155000,ni:"FG60F Master (39,000) + MA 2ปี (80,000) + Config (20,000) + FG60F Slave (39,000) + MA Slave (40,000)",nv:218000,note:"เพิ่ม Slave Firewall + แยก MA แต่ละตัวชัดเจน"},
-  {g:"Hardware",s:"changed",n:"NAS",oi:"NAS 1 ชุด",ov:16800,ni:"QNAP TS-433 (13,200) + WD HDD 4ลูก (23,200) + UPS (5,700)",nv:42100,note:"ระบุ Model ชัดเจน เพิ่ม Storage HDD และ UPS"},
-  {g:"Hardware",s:"changed",n:"Switching Hub",oi:"Switching Hub 2 ชุด",ov:31000,ni:"Aruba 1930 Master (15,500) + UPS (5,700) + Aruba 1930 Slave (15,500) + UPS (5,700)",nv:42400,note:"ระบุ Model ชัดเจน เพิ่ม UPS แต่ละตัว"},
-  {g:"Hardware",s:"changed",n:"NVR + HDD NVR",oi:"NVR (4,000) + HDD NVR (5,000)",ov:9000,ni:"Hikvision NVR (1,800) + WD HDD (4,990)",nv:6790,note:"ระบุ Model ชัดเจน ราคารวมลดลง"},
-  {g:"Hardware",s:"changed",n:"CCTV",oi:"CCTV 8 ชุด × 1,400",ov:11200,ni:"DS-2CD1323G2-LIU 8 ตัว × 920",nv:7360,note:"ระบุ Model ชัดเจน ราคาต่อตัวลดลง"},
-  {g:"Hardware",s:"changed",n:"Server Rack",oi:"Server Rack 2 ชุด × 8,800",ov:17600,ni:"ENCOM CR6627 1 ชุด × 8,800",nv:8800,note:"ลดจำนวนจาก 2 เหลือ 1 ชุด"},
-  {g:"Hardware",s:"new",n:"Lan + อุปกรณ์เดินระบบ (ใหม่)",oi:"Lan cat6 300M 2 ม้วน (9,000)",ov:9000,ni:"AMP CAT6 (10,400) + RJ45 (1,500) + Plug Client (11,250) + Plug Server (1,700) + Utility (10,000)",nv:34850,note:"เพิ่มรายการ RJ45, Power Strip และ Utility"},
-  {g:"Software",s:"same",n:"Developer (พัฒนาระบบ)",oi:"7 manday × 10,000",ov:70000,ni:"7 manday × 10,000",nv:70000,note:"เหมือนเดิมทุกอย่าง"},
-  {g:"Software",s:"changed",n:"Antivirus",oi:"Antivirus Server License 3 ชุด × 15,600",ov:46800,ni:"Kaspersky Client 40 License (20,800) + Kaspersky Server 4 License (8,000)",nv:28800,note:"แยก Client/Server ชัดเจน ราคารวมลดลง"},
-  {g:"Software",s:"new",n:"Internet Master (ใหม่)",oi:"-",ov:0,ni:"AIS/TRUE Fiber 800/เดือน × 36",nv:28800,note:"ไม่มีในเอกสารเดิม"},
-  {g:"Software",s:"new",n:"Internet Backup (ใหม่)",oi:"-",ov:0,ni:"TRUE/NT Backup Fiber 600/เดือน × 36",nv:21600,note:"ไม่มีในเอกสารเดิม เพิ่มสาย Internet สำรอง"},
-  {g:"Software",s:"new",n:"Config Network (ใหม่)",oi:"-",ov:0,ni:"Network Config Service 1 ครั้ง (5,000)",nv:5000,note:"ไม่มีในเอกสารเดิม"},
+// ข้อมูลทุกหมวด: ov=เก่า, nv=ใหม่, 0=ไม่มีในเวอร์ชันนั้น
+const sections=[
+  {
+    id:'labor', label:'ลูกจ้างหลัก', color:'#1a3c6e',
+    cols:['รายการ','อัตรา/คน/เดือน','จน.คน','หน่วย','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'เงินเดือน',rate:12000,cnt:43,unit:'คน/เดือน',om:516000,oc:18576000,nm:516000,nc:18576000},
+      {n:'ค่าตำแหน่ง - ปรับขึ้นเงินเดือน',rate:1000,cnt:43,unit:'คน/เดือน',om:43000,oc:1548000,nm:43000,nc:1548000},
+      {n:'ค่าเดินทาง',rate:1000,cnt:43,unit:'คน/เดือน',om:43000,oc:1548000,nm:43000,nc:1548000},
+      {n:'ค่าเบี้ยขยัน',rate:1000,cnt:43,unit:'คน/เดือน',om:43000,oc:1548000,nm:43000,nc:1548000},
+      {n:'เงินพิเศษครบสัญญา - โบนัส',rate:3000,cnt:43,unit:'คน/สัญญา',om:3583.33,oc:129000,nm:3583.33,nc:129000},
+      {n:'ประกันสังคม 5%',rate:650,cnt:43,unit:'คน/เดือน',om:27950,oc:1006200,nm:27950,nc:1006200},
+      {n:'กองทุนเงินทดแทน 1%',rate:120,cnt:43,unit:'คน/เดือน',om:5160,oc:185760,nm:5160,nc:185760},
+    ]
+  },
+  {
+    id:'coord', label:'ผู้ประสานงาน', color:'#37474f',
+    cols:['รายการ','อัตรา/คน/เดือน','จน.คน','หน่วย','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'เงินเดือน',rate:15000,cnt:2,unit:'คน/เดือน',om:30000,oc:1080000,nm:30000,nc:1080000},
+      {n:'ค่าประสานงาน',rate:1000,cnt:2,unit:'คน/เดือน',om:2000,oc:72000,nm:2000,nc:72000},
+      {n:'ค่าตำแหน่ง - ปรับขึ้นเงินเดือน',rate:1000,cnt:2,unit:'คน/เดือน',om:2000,oc:72000,nm:2000,nc:72000},
+      {n:'ค่าเดินทาง',rate:1000,cnt:2,unit:'คน/เดือน',om:2000,oc:72000,nm:2000,nc:72000},
+      {n:'ค่าเบี้ยขยัน',rate:1000,cnt:2,unit:'คน/เดือน',om:2000,oc:72000,nm:2000,nc:72000},
+      {n:'เงินพิเศษครบสัญญา - โบนัส',rate:3000,cnt:2,unit:'คน/สัญญา',om:166.67,oc:6000,nm:166.67,nc:6000},
+      {n:'ประกันสังคม 5%',rate:750,cnt:2,unit:'คน/เดือน',om:1500,oc:54000,nm:1500,nc:54000},
+      {n:'กองทุนเงินทดแทน 1%',rate:150,cnt:2,unit:'คน/เดือน',om:300,oc:10800,nm:300,nc:10800},
+    ]
+  },
+  {
+    id:'uniform', label:'เครื่องแบบ', color:'#4a148c',
+    cols:['รายการ','ชุด/คน','อัตรา/ชุด','จน.คน','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'เสื้อ',a:3,b:500,c:50,om:2083.33,oc:75000,nm:2083.33,nc:75000},
+      {n:'บัตรพนักงาน',a:1,b:100,c:50,om:138.89,oc:5000,nm:138.89,nc:5000},
+    ]
+  },
+  {
+    id:'insurance', label:'ประกันและตรวจร่างกาย', color:'#00695c',
+    cols:['รายการ','อัตรา/หน่วย','จำนวน','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'ตรวจสุขภาพ',rate:500,cnt:50,om:694.44,oc:25000,nm:694.44,nc:25000},
+      {n:'ประกันอุบัติเหตุ',rate:700,cnt:50,om:972.22,oc:35000,nm:972.22,nc:35000},
+      {n:'ตรวจประวัติอาชญากรรม',rate:130,cnt:50,om:180.56,oc:6500,nm:180.56,nc:6500},
+    ]
+  },
+  {
+    id:'hw', label:'Hardware', color:'#1a3c6e',
+    cols:['รายการ','จำนวน','@หน่วย','คส.','จน.เดือน','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'คอมพิวเตอร์ + จอมอนิเตอร์',qty:39,unit:24000,cs:36,jm:36,om:26000,oc:936000,nm:26000,nc:936000},
+      {n:'เครื่อง Scan เอกสาร - 8190',qty:10,unit:25200,cs:36,jm:36,om:7000,oc:252000,nm:7000,nc:252000},
+      {n:'เครื่องพิมพ์ Laser - 3 in 1',qty:4,unit:8000,cs:36,jm:36,om:888.89,oc:32000,nm:888.89,nc:32000},
+      {n:'เครื่องยิงบาร์โค้ด',qty:15,unit:2000,cs:36,jm:36,om:833.33,oc:30000,nm:833.33,nc:30000},
+      {n:'เครื่องพิมพ์ Inkjet - ปริ้นสติ๊กเกอร์',qty:2,unit:3000,cs:36,jm:36,om:166.67,oc:6000,nm:166.67,nc:6000},
+      {n:'เครื่อง Scan Ricoh หน้าคู่ 9900',qty:2,unit:300000,cs:36,jm:36,om:16666.67,oc:600000,nm:16666.67,nc:600000},
+      {n:'Lan AMP CAT6 UTP Cable',qty:2,unit:5200,cs:1,jm:1,om:288.89,oc:10400,nm:250,nc:9000,note:'เก่าใช้ AMP 5,200/ม้วน → ใหม่ใช้ 4,500/ม้วน'},
+      {n:'หมึกสิงโต',qty:1,unit:1200,cs:1,jm:36,om:1200,oc:43200,nm:1200,nc:43200},
+      {n:'หมึกปริ้นสติ๊กเกอร์',qty:72,unit:200,cs:1,jm:1,om:400,oc:14400,nm:400,nc:14400},
+      {n:'CCTV',qty:8,unit:920,cs:1,jm:1,om:204.44,oc:7360,nm:311.11,nc:11200,note:'เก่า 920/ตัว → ใหม่ 1,400/ตัว'},
+      {n:'NVR + PPOE',qty:1,unit:1800,cs:1,jm:1,om:50,oc:1800,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Harddisk NVR',qty:1,unit:5000,cs:1,jm:1,om:138.89,oc:5000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Server Rack',qty:1,unit:12000,cs:1,jm:1,om:333.33,oc:12000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'RJ45 AMP CAT6',qty:150,unit:10,cs:1,jm:1,om:41.67,oc:1500,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า'},
+      {n:'Plug Client Toshino',qty:25,unit:450,cs:1,jm:1,om:312.50,oc:11250,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า'},
+      {n:'Plug Server APC PDU',qty:2,unit:850,cs:1,jm:1,om:47.22,oc:1700,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า'},
+      {n:'UPS (รวม 7 ตัว)',qty:7,unit:5700,cs:1,jm:1,om:1108.33,oc:39900,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Switch L2 Master+Slave',qty:2,unit:15500,cs:1,jm:1,om:861.11,oc:31000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'NAS - QNAP',qty:1,unit:13200,cs:1,jm:1,om:366.67,oc:13200,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Storage NAS - WD HDD',qty:4,unit:5800,cs:1,jm:1,om:644.44,oc:23200,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า'},
+      {n:'Server Main (DC)',qty:1,unit:70000,cs:1,jm:1,om:1944.44,oc:70000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Server Backup (DC)',qty:1,unit:47000,cs:1,jm:1,om:1305.56,oc:47000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Server Application',qty:1,unit:69000,cs:1,jm:1,om:1916.67,oc:69000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+      {n:'Server Application Backup',qty:1,unit:49000,cs:1,jm:1,om:1361.11,oc:49000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า (ย้ายไป SW)'},
+    ]
+  },
+  {
+    id:'sw', label:'Software', color:'#2e7d32',
+    cols:['รายการ','จำนวน','@หน่วย','คส.','จน.เดือน','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'Antivirus (Client+Server)',qty:1,unit:40000,cs:1,jm:1,om:1111.11,oc:40000,nm:1300,nc:46800,note:'ใหม่แยก 3 License × 15,600'},
+      {n:'ค่าพัฒนาระบบ 7 manday',qty:7,unit:10000,cs:1,jm:1,om:1944.44,oc:70000,nm:1944.44,nc:70000},
+      {n:'Firewall Master+Slave',qty:2,unit:40000,cs:1,jm:1,om:2222.22,oc:80000,nm:0,nc:0,note:'ตัดออก → รวมใน fortigate firewall'},
+      {n:'MA Firewall Master+Slave',qty:1,unit:120000,cs:1,jm:1,om:3333.33,oc:120000,nm:0,nc:0,note:'ตัดออก → รวมใน fortigate firewall'},
+      {n:'Config Fortigate',qty:1,unit:20000,cs:1,jm:1,om:555.56,oc:20000,nm:555.56,nc:20000},
+      {n:'License Windows Server (2 ชุด)',qty:2,unit:40000,cs:1,jm:1,om:2222.22,oc:80000,nm:0,nc:0,note:'ตัดออก → รวมใน Main Server+Windows'},
+      {n:'License CAL',qty:1,unit:80000,cs:1,jm:1,om:2222.22,oc:80000,nm:0,nc:0,note:'ตัดออก → รวมใน Main Server+Windows'},
+      {n:'Switching Hub',qty:2,unit:15500,cs:1,jm:1,om:0,oc:0,nm:861.11,nc:31000,note:'เพิ่มใหม่จากเวอร์ชันเก่า'},
+      {n:'Main Server+Windows (รวม)',qty:1,unit:171450,cs:1,jm:1,om:0,oc:0,nm:4762.50,nc:171450,note:'เพิ่มใหม่ รวม Server+License'},
+      {n:'UPS Server',qty:1,unit:7500,cs:1,jm:1,om:0,oc:0,nm:208.33,nc:7500,note:'เพิ่มใหม่'},
+      {n:'NAS (รวม)',qty:1,unit:16800,cs:1,jm:1,om:0,oc:0,nm:466.67,nc:16800,note:'เพิ่มใหม่'},
+      {n:'Fortigate Firewall (รวม)',qty:1,unit:135000,cs:1,jm:1,om:0,oc:0,nm:3750,nc:135000,note:'เพิ่มใหม่ รวม Master+Slave+MA'},
+      {n:'Standby Server',qty:1,unit:46000,cs:1,jm:1,om:0,oc:0,nm:1277.78,nc:46000,note:'เพิ่มใหม่'},
+      {n:'UPS สำหรับ Standby',qty:1,unit:7200,cs:1,jm:1,om:0,oc:0,nm:200,nc:7200,note:'เพิ่มใหม่'},
+      {n:'Ex HDD 8-16TB (Backup)',qty:1,unit:12000,cs:1,jm:1,om:0,oc:0,nm:333.33,nc:12000,note:'เพิ่มใหม่'},
+      {n:'Server Rack (2 ชุด)',qty:2,unit:8800,cs:1,jm:1,om:0,oc:0,nm:488.89,nc:17600,note:'เพิ่มใหม่'},
+      {n:'NVR',qty:1,unit:4000,cs:1,jm:1,om:0,oc:0,nm:111.11,nc:4000,note:'เพิ่มใหม่'},
+      {n:'HDD NVR',qty:1,unit:5000,cs:1,jm:1,om:0,oc:0,nm:138.89,nc:5000,note:'เพิ่มใหม่'},
+    ]
+  },
+  {
+    id:'supply', label:'วัสดุอุปกรณ์สำนักงาน', color:'#795548',
+    cols:['รายการ','จำนวน','@หน่วย','คส.','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'อุปกรณ์สำนักงานทั่วไป',qty:36,unit:10000,cs:1,om:10000,oc:360000,nm:10000,nc:360000},
+    ]
+  },
+  {
+    id:'misc', label:'ค่าใช้จ่ายอื่นๆ', color:'#bf360c',
+    cols:['รายการ','อัตรา/หน่วย','จำนวน','ทั้งหมด/เดือน (เก่า)','ทั้งสัญญา (เก่า)','ทั้งหมด/เดือน (ใหม่)','ทั้งสัญญา (ใหม่)','ส่วนต่าง/สัญญา','สถานะ'],
+    rows:[
+      {n:'ค่างานปีใหม่',rate:30000,cnt:3,om:2500,oc:90000,nm:2500,nc:90000},
+      {n:'ค่าเดินทาง',rate:500,cnt:30,om:416.67,oc:15000,nm:416.67,nc:15000},
+      {n:'ค่าเตรียมงาน',rate:50000,cnt:1,om:1388.89,oc:50000,nm:1388.89,nc:50000},
+      {n:'ค่าปรับ 3%',rate:1174860,cnt:1,om:32635,oc:1174860,nm:32635,nc:1174860},
+      {n:'ค่ารับรอง',rate:2000,cnt:3,om:166.67,oc:6000,nm:166.67,nc:6000},
+      {n:'ค่ากระเช้า + ของขวัญปีใหม่',rate:2000,cnt:3,om:166.67,oc:6000,nm:166.67,nc:6000},
+      {n:'กระดาษสติ๊กเกอร์ 5,000 ดวง/ม้วน',rate:370,cnt:380,om:3905.56,oc:140600,nm:3905.56,nc:140600},
+      {n:'Internet AIS FIX IP 300/300 Mbps',rate:22500,cnt:36,om:22500,oc:810000,nm:23000,nc:828000,note:'เก่า 22,500 → ใหม่ 23,000/เดือน'},
+      {n:'ค่าเน็ตบ้าน 90/30 Mbps',rate:540,cnt:36,om:540,oc:19440,nm:600,nc:21600,note:'เก่า 540 → ใหม่ 600/เดือน'},
+      {n:'Network Config Service',rate:5000,cnt:1,om:138.89,oc:5000,nm:0,nc:0,note:'ตัดออกในเวอร์ชันเก่า'},
+    ]
+  },
 ];
 
-const totalOld=data.reduce((a,d)=>a+d.ov,0);
-const totalNew=data.reduce((a,d)=>a+d.nv,0);
-const diff=totalNew-totalOld;
-const newOnly=data.filter(d=>d.s==='new').reduce((a,d)=>a+d.nv,0);
-const changedUp=data.filter(d=>d.s==='changed'&&d.nv>d.ov).reduce((a,d)=>a+(d.nv-d.ov),0);
-const changedDown=data.filter(d=>d.s==='changed'&&d.nv<d.ov).reduce((a,d)=>a+(d.ov-d.nv),0);
+// คำนวณ Status
+function getStatus(ov,nv){
+  if(ov===0&&nv>0)return 'new';
+  if(ov>0&&nv===0)return 'removed';
+  if(ov===nv)return 'same';
+  return nv>ov?'up':'down';
+}
+const statusLabel={same:'เหมือนเดิม',up:'ราคาเพิ่ม',down:'ราคาลด',new:'รายการใหม่',removed:'ตัดออก'};
+const statusClass={same:'b-same',up:'b-up',down:'b-down',new:'b-new',removed:'b-removed'};
 
+// คำนวณ totals
+let totalOld=0,totalNew=0;
+sections.forEach(sec=>{
+  sec.rows.forEach(r=>{
+    const ov=r.oc||0, nv=r.nc||0;
+    totalOld+=ov; totalNew+=nv;
+    r._status=getStatus(ov,nv);
+  });
+  sec._oc=sec.rows.reduce((a,r)=>a+(r.oc||0),0);
+  sec._nc=sec.rows.reduce((a,r)=>a+(r.nc||0),0);
+});
 document.getElementById('c1').textContent=fmt(totalOld);
 document.getElementById('c2').textContent=fmt(totalNew);
-document.getElementById('c3').textContent=(diff>=0?'+':'')+fmt(diff);
-document.getElementById('c4').textContent=fmt(totalNew/CS);
-document.getElementById('d1').textContent='+'+fmt(newOnly)+' บาท';
-document.getElementById('d2').textContent='+'+fmt(changedUp)+' บาท';
-document.getElementById('d3').textContent='-'+fmt(changedDown)+' บาท';
+const diff=totalNew-totalOld;
+const c3=document.getElementById('c3');
+c3.textContent=(diff>=0?'+':'')+fmt(diff);
+c3.style.color=diff>0?'#c62828':'#2e7d32';
 
-const bMap={same:'b-same',changed:'b-changed',new:'b-new'};
-const lMap={same:'เหมือนเดิม',changed:'มีเดิม / เปลี่ยน',new:'รายการใหม่'};
-let cur='all';
+// Filter state
+const active=new Set(sections.map(s=>s.id));
 
-function setFilter(f,btn){
-  cur=f;
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
+// Build chips
+const chipsEl=document.getElementById('chips');
+sections.forEach(sec=>{
+  const ch=document.createElement('button');
+  ch.className='chip on';
+  ch.textContent=sec.label;
+  ch.style.background=sec.color;
+  ch.style.borderColor=sec.color;
+  ch.dataset.id=sec.id;
+  ch.dataset.color=sec.color;
+  ch.onclick=function(){
+    if(active.has(sec.id)){
+      active.delete(sec.id);
+      ch.classList.remove('on');
+      ch.style.background='#fff';
+      ch.style.color='#555';
+      ch.style.borderColor='#ddd';
+    }else{
+      active.add(sec.id);
+      ch.classList.add('on');
+      ch.style.background=sec.color;
+      ch.style.color='#fff';
+      ch.style.borderColor=sec.color;
+    }
+    render();
+  };
+  chipsEl.appendChild(ch);
+});
+
+function diffCell(ov,nv){
+  const d=nv-ov;
+  if(d===0)return '<span class="zero">—</span>';
+  return d>0?'<span class="plus">+'+fmt(d)+'</span>':'<span class="minus">'+fmt(d)+'</span>';
 }
 
 function render(){
-  const fd=cur==='all'?data:data.filter(d=>d.s===cur);
   let html='';
-  ['Hardware','Software'].forEach(grp=>{
-    const rows=fd.filter(d=>d.g===grp);
-    if(!rows.length)return;
-    const cls=grp==='Hardware'?'hw':'sw';
-    html+='<div class="sec-wrap"><div class="sec-hdr '+cls+'">'+grp+'</div><div class="tbl-wrap"><table>';
-    html+='<thead><tr><th>สถานะ</th><th>รายการ</th><th>รายละเอียดเดิม</th><th class="num">ทั้งสัญญา (เดิม)</th><th>รายละเอียดใหม่</th><th class="num">ทั้งสัญญา (ใหม่)</th><th class="num">ส่วนต่าง</th><th>หมายเหตุ</th></tr></thead><tbody>';
-    rows.forEach(r=>{
-      const d=r.nv-r.ov;
-      const ds=d===0?'—':(d>0?'<span class="plus">+'+fmt(d)+'</span>':'<span class="minus">-'+fmt(Math.abs(d))+'</span>');
-      html+='<tr>';
-      html+='<td><span class="badge '+bMap[r.s]+'">'+lMap[r.s]+'</span></td>';
-      html+='<td class="bold">'+r.n+'</td>';
-      html+='<td style="color:#555;font-size:11px">'+r.oi+'</td>';
-      html+='<td class="num" style="color:#546e7a">'+(r.ov?fmt(r.ov):'-')+'</td>';
-      html+='<td style="font-size:11px">'+r.ni+'</td>';
-      html+='<td class="num bold" style="color:#1565c0">'+fmt(r.nv)+'</td>';
-      html+='<td class="num">'+ds+'</td>';
-      html+='<td style="color:#666;font-size:11px">'+r.note+'</td>';
-      html+='</tr>';
+  sections.filter(s=>active.has(s.id)).forEach(sec=>{
+    const subDiff=sec._nc-sec._oc;
+    html+=`<div class="sec-wrap">
+    <div class="sec-hdr" style="background:${sec.color}">
+      <span>${sec.label}</span>
+      <span style="font-size:11px;opacity:.85">
+        เก่า: ${fmt(sec._oc)} → ใหม่: ${fmt(sec._nc)} &nbsp;|&nbsp; ส่วนต่าง: ${subDiff>=0?'+':''}${fmt(subDiff)} บาท
+      </span>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>`;
+
+    // generic header: รายการ, ...cols, ทั้งหมด/เดือน เก่า, ทั้งสัญญา เก่า, ทั้งหมด/เดือน ใหม่, ทั้งสัญญา ใหม่, ส่วนต่าง, สถานะ, หมายเหตุ
+    if(sec.id==='hw'||sec.id==='sw'){
+      html+=`<th>รายการ</th><th class="num">จำนวน</th><th class="num">@หน่วย</th><th class="num">คส.</th><th class="num">จน.เดือน</th>`;
+    }else if(sec.id==='labor'||sec.id==='coord'){
+      html+=`<th>รายการ</th><th class="num">อัตรา/คน</th><th class="num">จน.คน</th><th>หน่วย</th>`;
+    }else if(sec.id==='uniform'){
+      html+=`<th>รายการ</th><th class="num">ชุด/คน</th><th class="num">อัตรา/ชุด</th><th class="num">จน.คน</th>`;
+    }else if(sec.id==='insurance'||sec.id==='misc'){
+      html+=`<th>รายการ</th><th class="num">อัตรา/หน่วย</th><th class="num">จำนวน</th>`;
+    }else if(sec.id==='supply'){
+      html+=`<th>รายการ</th><th class="num">จำนวน</th><th class="num">@หน่วย</th><th class="num">คส.</th>`;
+    }
+    html+=`<th class="num">เดือน (เก่า)</th><th class="num">สัญญา (เก่า)</th><th class="num">เดือน (ใหม่)</th><th class="num">สัญญา (ใหม่)</th><th class="num">ส่วนต่าง</th><th>สถานะ</th><th>หมายเหตุ</th></tr></thead><tbody>`;
+
+    sec.rows.forEach(r=>{
+      const ov=r.oc||0, nv=r.nc||0;
+      const st=r._status;
+      let midCells='';
+      if(sec.id==='hw'||sec.id==='sw'){
+        midCells=`<td class="num">${r.qty||'-'}</td><td class="num">${r.unit?fmt(r.unit):'-'}</td><td class="num">${r.cs||1}</td><td class="num">${r.jm||1}</td>`;
+      }else if(sec.id==='labor'||sec.id==='coord'){
+        midCells=`<td class="num">${fmt(r.rate)}</td><td class="num">${r.cnt}</td><td>${r.unit}</td>`;
+      }else if(sec.id==='uniform'){
+        midCells=`<td class="num">${r.a}</td><td class="num">${fmt(r.b)}</td><td class="num">${r.c}</td>`;
+      }else if(sec.id==='insurance'||sec.id==='misc'){
+        midCells=`<td class="num">${fmt(r.rate)}</td><td class="num">${r.cnt}</td>`;
+      }else if(sec.id==='supply'){
+        midCells=`<td class="num">${r.qty}</td><td class="num">${fmt(r.unit)}</td><td class="num">${r.cs}</td>`;
+      }
+      html+=`<tr>
+        <td class="bold">${r.n}</td>${midCells}
+        <td class="num">${ov?fmt(r.om||0):'-'}</td>
+        <td class="num">${ov?fmt(ov):'-'}</td>
+        <td class="num">${nv?fmt(r.nm||0):'-'}</td>
+        <td class="num">${nv?fmt(nv):'-'}</td>
+        <td class="num">${diffCell(ov,nv)}</td>
+        <td><span class="badge ${statusClass[st]}">${statusLabel[st]}</span></td>
+        <td style="font-size:11px;color:#666">${r.note||''}</td>
+      </tr>`;
     });
-    const so=rows.reduce((a,r)=>a+r.ov,0),sn=rows.reduce((a,r)=>a+r.nv,0),sd=sn-so;
-    html+='<tr class="sub-row"><td colspan="3" style="text-align:right">รวม '+grp+'</td>';
-    html+='<td class="num">'+fmt(so)+'</td><td></td><td class="num">'+fmt(sn)+'</td>';
-    html+='<td class="num">'+(sd>=0?'<span class="plus">+':'<span class="minus">-')+fmt(Math.abs(sd))+'</span></td><td></td></tr>';
-    html+='</tbody></table></div></div>';
+
+    html+=`<tr class="sub-row">
+      <td colspan="3" style="text-align:right">รวม ${sec.label}</td>
+      <td colspan="${sec.id==='hw'||sec.id==='sw'?2:sec.id==='labor'||sec.id==='coord'?1:sec.id==='uniform'?1:0}" ></td>
+      <td class="num">-</td><td class="num">${fmt(sec._oc)}</td>
+      <td class="num">-</td><td class="num">${fmt(sec._nc)}</td>
+      <td class="num">${diffCell(sec._oc,sec._nc)}</td>
+      <td colspan="2"></td>
+    </tr>`;
+    html+=`</tbody></table></div></div>`;
   });
-  html+='<div class="grand"><table style="width:100%;font-size:13px"><tr style="color:#1a3c6e;font-weight:bold">';
-  html+='<td>รวม Hardware + Software ทั้งหมด</td>';
-  html+='<td class="num" style="padding-right:20px">เดิม: <span style="color:#546e7a">'+fmt(totalOld)+'</span> บาท</td>';
-  html+='<td class="num" style="padding-right:20px">ใหม่: <span style="color:#1565c0">'+fmt(totalNew)+'</span> บาท</td>';
-  html+='<td class="num">ส่วนต่าง: <span class="plus">+'+fmt(diff)+'</span> บาท</td>';
-  html+='</tr></table></div>';
+
+  // Grand total
+  const visOld=sections.filter(s=>active.has(s.id)).reduce((a,s)=>a+s._oc,0);
+  const visNew=sections.filter(s=>active.has(s.id)).reduce((a,s)=>a+s._nc,0);
+  const visDiff=visNew-visOld;
+  html+=`<div class="summary-box"><div style="font-weight:bold;color:#1a3c6e;margin-bottom:10px;font-size:14px">📋 สรุปยอดรวม (เฉพาะหมวดที่แสดง)</div>
+  <div class="summary-grid">
+    <div class="sitem"><div class="sl">รวมต้นทุน (เก่า)</div><div class="sv" style="color:#546e7a">${fmt(visOld)}</div><div style="font-size:10px;color:#aaa">บาท/สัญญา</div></div>
+    <div class="sitem"><div class="sl">รวมต้นทุน (ใหม่)</div><div class="sv" style="color:#1565c0">${fmt(visNew)}</div><div style="font-size:10px;color:#aaa">บาท/สัญญา</div></div>
+    <div class="sitem"><div class="sl">ส่วนต่างรวม</div><div class="sv" style="${visDiff>0?'color:#c62828':'color:#2e7d32'}">${visDiff>=0?'+':''}${fmt(visDiff)}</div><div style="font-size:10px;color:#aaa">บาท/สัญญา</div></div>
+  </div></div>`;
+
   document.getElementById('tables').innerHTML=html;
 }
 
 function exportCSV(){
-  const rows=[['กลุ่ม','สถานะ','รายการ','รายละเอียดเดิม','ทั้งสัญญา (เดิม)','รายละเอียดใหม่','ทั้งสัญญา (ใหม่)','ส่วนต่าง','หมายเหตุ']];
-  data.forEach(r=>{
-    const d=r.nv-r.ov;
-    rows.push([r.g,lMap[r.s],r.n,r.oi,r.ov||'-',r.ni,r.nv,(d>=0?'+':'')+fmt(d),r.note]);
+  let rows=[['เปรียบเทียบ Breakdown Cost DS6805-012'],
+    ['เวอร์ชันเก่า (31/01/68)','vs','เวอร์ชันใหม่ (02/04/68)'],[]];
+  sections.forEach(sec=>{
+    rows.push([sec.label]);
+    rows.push(['รายการ','ทั้งสัญญา (เก่า)','ทั้งสัญญา (ใหม่)','ส่วนต่าง','สถานะ','หมายเหตุ']);
+    sec.rows.forEach(r=>{
+      const d=(r.nc||0)-(r.oc||0);
+      rows.push([r.n,r.oc||0,r.nc||0,(d>=0?'+':'')+fmt(d),statusLabel[r._status],r.note||'']);
+    });
+    const sd=sec._nc-sec._oc;
+    rows.push(['รวม '+sec.label,sec._oc,sec._nc,(sd>=0?'+':'')+fmt(sd),'','']);
+    rows.push([]);
   });
-  rows.push([]);
-  rows.push(['','','รวมเดิม',fmt(totalOld),'รวมใหม่',fmt(totalNew),'ส่วนต่าง',(diff>=0?'+':'')+fmt(diff)]);
-  const csv=rows.map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');
+  rows.push(['รวมทั้งหมด',totalOld,totalNew,(diff>=0?'+':'')+fmt(diff)]);
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
   const b64=btoa(unescape(encodeURIComponent('\uFEFF'+csv)));
   const a=document.createElement('a');
   a.href='data:text/csv;base64,'+b64;
-  a.download='Compare_HW_SW.csv';
+  a.download='Compare_BD_DS6805-012.csv';
   a.click();
 }
 
