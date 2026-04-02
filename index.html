@@ -232,9 +232,14 @@ sections.forEach(sec=>{
   sec._nc=sec.rows.reduce((a,r)=>a+(r.nc||0),0);
 });
 
-document.getElementById('c1').textContent=fmt(totalOld);
-document.getElementById('c2').textContent=fmt(totalNew);
-const diff=totalNew-totalOld;
+// ใช้ตัวเลขจากเอกสารจริง (หน้าสรุป Breakdown Cost)
+const totalOldDoc = 31322310.00; // DS6805012.pdf เก่า
+const totalNewDoc = 31620230.00; // DS6805012 ver.2.pdf ใหม่
+const diffDoc = totalNewDoc - totalOldDoc; // = 297,920
+
+document.getElementById('c1').textContent=fmt(totalOldDoc);
+document.getElementById('c2').textContent=fmt(totalNewDoc);
+const diff=diffDoc;
 const c3=document.getElementById('c3');
 c3.textContent=(diff>=0?'+':'')+fmt(diff);
 c3.style.color=diff>0?'#c62828':'#2e7d32';
